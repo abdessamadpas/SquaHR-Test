@@ -50,7 +50,9 @@ export default {
       this.tasks.push(newTask);
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`http://127.0.0.1:8000/api/tasks`, {
+        const url = `${import.meta.env.VITE_BASE_URL}/tasks`
+
+        const response = await fetch(url, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -89,8 +91,10 @@ export default {
         const id = task.id;
         try {
           const token = localStorage.getItem("token");
+          const url = `${import.meta.env.VITE_BASE_URL}/tasks/${id}`
+
           const response = await fetch(
-            `http://127.0.0.1:8000/api/tasks/${id}`,
+            url,
             {
               method: "PUT",
               headers: {
@@ -122,8 +126,9 @@ export default {
       this.tasks = this.tasks.filter((task) => task.id !== taskId);
       try {
         const token = localStorage.getItem("token");
+        const url = `${import.meta.env.VITE_BASE_URL}/tasks/${taskId}`
         const response = await fetch(
-          `http://127.0.0.1:8000/api/tasks/${taskId}`,
+          url,
           {
             method: "DELETE",
             headers: {
@@ -158,7 +163,9 @@ export default {
     async fetchTasks() {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://127.0.0.1:8000/api/tasks", {
+        const url = `${import.meta.env.VITE_BASE_URL}/tasks/`
+
+        const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

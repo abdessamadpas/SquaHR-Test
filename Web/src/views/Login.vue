@@ -43,6 +43,7 @@
 
 <script>
 export default {
+
   name: "Login",
   data() {
     return {
@@ -58,8 +59,9 @@ export default {
   },
   methods: {
     async login() {
+      const url = `${import.meta.env.VITE_BASE_URL}/login`
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/login", {
+        const response = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
