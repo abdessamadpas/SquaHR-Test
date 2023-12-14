@@ -75,20 +75,24 @@
             <input
               v-if="task.isEditing"
               v-model="task.description"
-              class="border focus:border-blue-500 border-green-400 p-1 rounded-lg text-xs text-gray-700"
+              class="border-2 p-2 mt-1 focus:border-blue-500 rounded-lg text-xs text-gray-700"
             />
           </td>
           <td class="whitespace-nowrap p-3 text-xs text-gray-700">
-            <template v-if="!task.isEditing">{{
-              formatDueDate(task.due_date)
-            }}</template>
+            <template v-if="!task.isEditing">{{ task.due_date }}</template>
             <input
               v-if="task.isEditing"
               v-model="task.due_date"
               type="date"
               id="taskDueDate"
-              class="mt-1 p-2 border rounded-md w-full"
+              class="mt-1 p-2 border-2 rounded-md w-full"
             />
+            <p
+              v-if="isDueDateInvalid(task)"
+              class="text-green-500 text-sm mt-1"
+            >
+              Due date must be in the future.
+            </p>
           </td>
           <td class="whitespace-nowrap p-3 text-xs text-gray-700">
             <template v-if="!task.isEditing">
@@ -107,10 +111,11 @@
             <select
               v-if="task.isEditing"
               v-model="task.status"
-              class="border focus:border-blue-500 border-green-400 p-1 rounded-lg text-xs text-gray-700"
+              id="taskStatus"
+              class="border-2 focus:border-blue-500 p-2 mt-1 rounded-lg text-xs text-gray-700"
             >
-              <option value="InProgress">In Progress</option>
-              <option value="Done">Done</option>
+              <option value="in_progress">In Progress</option>
+              <option value="done">Done</option>
             </select>
           </td>
           <td class="whitespace-nowrap p-3 text-xs text-gray-700">
@@ -121,11 +126,13 @@
               <div
                 class="w-8 h-8 rounded-lg bg-[#F4F4F5] flex items-center justify-center"
               >
+              
                 <Icon
                   color="#6B88FA"
                   width="18"
                   hight="18"
                   @click="toggleEditing(task)"
+                  :class="{ 'disabled-icon': isDueDateInvalid(task) }"
                   :icon="
                     task.isEditing ? 'ic:baseline-check' : 'radix-icons:update'
                   "
@@ -149,7 +156,6 @@
     </table>
   </div>
 </template>
-
 <script>
 import { Icon } from "@iconify/vue";
 
@@ -169,19 +175,8 @@ export default {
     Icon,
   },
   methods: {
-    formatDueDate(dueDate) {
-      const date = new Date(dueDate);
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      return `${day}/${month}/${year}`;
-    },
     formatLastUpdate(lastUpdate) {
       const reformed = lastUpdate.split("T")[0];
-      console.log(lastUpdate.split("T")[0]);
-
-      // return reformed
-      // 2023-12-12
       return reformed.split("-").reverse().join("/");
     },
     sortByStatus() {
@@ -205,8 +200,19 @@ export default {
 
       this.sortOrder = sortOrder;
     },
+    isDueDateInvalid(newTask) {
+      const dueDate = new Date(newTask.due_date);
+      const currentDate = new Date();
+      return dueDate <= currentDate;
+    },
   },
+  computed: {},
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.disabled-icon {
+  opacity: 0.5; 
+  cursor: not-allowed;
+}
+</style>
