@@ -40,4 +40,18 @@ cd API
 php artisan serve
 ```
 
-# database : Azure Database for MySQL flexible server 
+# database : Azure Database for MySQL flexible server
+ 
+# for a quick access to the platform OR u can register a new user
+```bash
+email : squaHR@squaHR.com
+password : squaHR
+```
+
+```bash
+
+I aim to implement the draggable option, and I believe it would be easier if I initially choose a list instead of a table. I have explored some solutions for adding the draggable option to a table, but I encountered conflicts with my project. Due to time constraints during my exam period, 
+you can check my projects in this profile or my portfolio www.abdessamadpas.tech
+thanks🌱
+
+```
