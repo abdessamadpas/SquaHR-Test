@@ -36,21 +36,20 @@ export default {
 
   methods: {
     formatDate(inputDate) {
-      const [year, month, day] = inputDate.split("-");
+      const [year, month, day] = inputDate.split(" ")[0].split("-");
       const formattedDate = `${month}/${day}/${year}`;
       return formattedDate;
     },
+
     formatDueDateDB(inputDate) {
       const [year, month, day] = inputDate.split(" ")[0].split("-");
       const formattedDate = `${year}-${month}-${day}`;
       return formattedDate;
     },
     async handleTaskAdded(newTask) {
-      console.log("newTask", newTask);
-      this.tasks.push(newTask);
       try {
         const token = localStorage.getItem("token");
-        const url = `${import.meta.env.VITE_BASE_URL}/tasks`
+        const url = `${import.meta.env.VITE_BASE_URL}/tasks`;
 
         const response = await fetch(url, {
           method: "POST",
@@ -68,7 +67,10 @@ export default {
         const data = await response.json();
 
         if (response.ok) {
-          console.log("message", data.message);
+          this.tasks.push({
+            ...data,
+            due_date: this.formatDueDateDB(data.due_date),
+          });
         } else {
           if (response.status === 401 && data.error === "Unauthenticated.") {
             console.error("Token expired or invalid 🤌");
@@ -83,35 +85,36 @@ export default {
     },
 
     async toggleEditing(task) {
-      console.log("task", task);
       if (!task.isEditing) {
         task.isEditing = !task.isEditing;
       } else {
+        if (task.description === "" || task.due_date === "") {
+          alert("Please fill in all fields");
+          return;
+        }
         task.isEditing = !task.isEditing;
         const id = task.id;
         try {
           const token = localStorage.getItem("token");
-          const url = `${import.meta.env.VITE_BASE_URL}/tasks/${id}`
+          const url = `${import.meta.env.VITE_BASE_URL}/tasks/${id}`;
 
-          const response = await fetch(
-            url,
-            {
-              method: "PUT",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                description: task.description,
-                due_date: this.formatDate(task.due_date),
-                status: task.status,
-              }),
-            }
-          );
+          const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              description: task.description,
+              due_date: this.formatDate(task.due_date),
+              status: task.status,
+            }),
+          });
 
           const data = await response.json();
           if (response.ok) {
-            this.tasks = data;
+            const index = this.tasks.findIndex((t) => t.id === id);
+            this.tasks[index] = data;
           } else {
             const errorData = await response.json();
             console.error("Error fetching tasks:🛟", errorData);
@@ -126,22 +129,18 @@ export default {
       this.tasks = this.tasks.filter((task) => task.id !== taskId);
       try {
         const token = localStorage.getItem("token");
-        const url = `${import.meta.env.VITE_BASE_URL}/tasks/${taskId}`
-        const response = await fetch(
-          url,
-          {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const url = `${import.meta.env.VITE_BASE_URL}/tasks/${taskId}`;
+        const response = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         const data = await response.json();
 
         if (response.ok) {
-          console.log("message", data.message);
           this.$router.push("/");
         } else {
           if (response.status === 401 && data.error === "Unauthenticated.") {
@@ -163,7 +162,7 @@ export default {
     async fetchTasks() {
       try {
         const token = localStorage.getItem("token");
-        const url = `${import.meta.env.VITE_BASE_URL}/tasks/`
+        const url = `${import.meta.env.VITE_BASE_URL}/tasks/`;
 
         const response = await fetch(url, {
           headers: {
@@ -180,7 +179,6 @@ export default {
               due_date: this.formatDueDateDB(task.due_date),
             };
           });
-          console.log("formattedTasks", formattedTasks);
           this.tasks = formattedTasks;
         } else {
           const errorData = await response.json();

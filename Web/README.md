@@ -1,29 +1,43 @@
-# web
+`
+# Internship test for SQUAHR
 
-This template should help get you started developing with Vue 3 in Vite.
+## Overview
 
-## Recommended IDE Setup
+UI for an TODO app
+![mobile (8)](https://github.com/abdessamadpas/SquaHR-Test/assets/53188247/24bf962c-ae70-4a7b-ae4d-c717cb961c57)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+![mobile (9)](https://github.com/abdessamadpas/SquaHR-Test/assets/53188247/de3a9596-62e5-4450-8db4-f4e9e2ea680c)
 
-## Customize configuration
+![mobile (10)](https://github.com/abdessamadpas/SquaHR-Test/assets/53188247/b96003a5-846c-4ebd-a229-240db3bbaa0b)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
+# Clone the repository
 
-```sh
+```bash
+git clone https://github.com/abdessamadpas/SquaHR-Test
+```
+# Navigate to the project directory
+
+```bash
+cd Web
+```
+# Install dependencies
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# Run the app in development mode
+```bash
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
+```bash
+cd API
 ```
+
+# Run the app in development mode
+```bash
+php artisan serve
+```
+
+# database : Azure Database for MySQL flexible server 

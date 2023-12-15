@@ -68,7 +68,7 @@ import { Icon } from "@iconify/vue";
 
 export default {
   name: "AddTaskPopup",
-  props: ["newTask"],
+  // props: ["newTask"],
   data() {
     return {
       newTask: {
@@ -84,7 +84,6 @@ export default {
     },
     addTask() {
       const newTask = {
-        id: Math.floor(Math.random() * 1000),
         description: this.newTask.description,
         status: this.newTask.status,
         due_date: this.newTask.due_date,
